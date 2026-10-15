@@ -17,6 +17,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, OLED_DC, OLED_RESET,
 
 bool wasConnected = false;
 
+int messageCount = 0;
+
 // Functions
 
 void showOnOLED(String title, String message)
@@ -74,12 +76,22 @@ void loop()
 
   // Messages
 
-  if (bleMessageAvailable() == true)
+//  if (bleMessageAvailable() == true)
+//{
+//  String message = bleReadMessage();
+//    Serial.print("Received: ");
+//    Serial.println(message);
+//      showOnOLED("Message:", message);
+//}
+if (bleMessageAvailable() == true)
 {
   String message = bleReadMessage();
-    Serial.print("Received: ");
-    Serial.println(message);
-      showOnOLED("Message:", message);
+    messageCount = messageCount + 1;
+      Serial.print("Received: ");
+      Serial.println(message);
+        String title = "Message " + String(messageCount);
+          showOnOLED(title, message);
+          bleSend("Shown on OLED");
 }
 
 }
