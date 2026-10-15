@@ -3,6 +3,7 @@
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include "BLE_UART.h"
 
 // Global variables
 
@@ -13,6 +14,8 @@
 #define OLED_RESET 17
 #define OLED_CS    5
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, OLED_DC, OLED_RESET, OLED_CS);
+
+bool wasConnected = false;
 
 // Functions
 
@@ -42,13 +45,32 @@ void setup()
 
   display.begin(SSD1306_SWITCHCAPVCC);
     Serial.println("OLED Started");
-    showOnOLED("Lab 8: BLE", "Charles Belair");
+    showOnOLED("Lab 8: BLE", "Charles");
 
   // BLE code
+
+  bleBegin("ESP32_Charles");
+    Serial.println("BLE Started");
+    showOnOLED("BLE Ready", "Waiting");
+
 }
 
 void loop()
 {
   // Connection status
+  if (bleIsConnected() == true && wasConnected == false)
+{
+    wasConnected = true;
+    Serial.println("Phone Connected");
+      showOnOLED("BLE Status", "Connected");
+}
+
+  if (bleIsConnected() == false && wasConnected == true)
+  {
+    wasConnected = false;
+    Serial.println("Phone Disconnected");
+      showOnOLED("BLE Status", "Disconnected");
+  }
+
   // Messages
 }
