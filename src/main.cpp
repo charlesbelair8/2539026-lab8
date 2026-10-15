@@ -73,4 +73,13 @@ void loop()
   }
 
   // Messages
+
+  if (bleMessageAvailable() == true)
+{
+  String message = bleReadMessage();
+    Serial.print("Received: ");
+    Serial.println(message);
+      showOnOLED("Message:", message);
+}
+
 }
